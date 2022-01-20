@@ -5,8 +5,8 @@ homeassistant:
 #  elevation: 50
   unit_system: metric
   time_zone: Europe/Kiev
-#  packages: !include_dir_merge_named includes/packages
-#  customize: !include customize.yaml
+  packages: !include_dir_merge_named includes/packages
+  customize: !include customize.yaml
 #  auth_providers:
 #    - type: trusted_networks
 #      trusted_networks:
@@ -28,9 +28,9 @@ http:
 #    - 172.30.32.0/24
 #    - 172.16.0.0/16
 
-#lovelace: !include lovelace.yaml
+lovelace: !include lovelace.yaml
 
-#mqtt: !include configuration/mqtt.yaml
+mqtt: !include configuration/mqtt.yaml
 
 default_config:
 
@@ -86,13 +86,30 @@ logger:
 
 
 
-group: !include groups.yaml
-automation: !include automations.yaml
-script: !include scripts.yaml
-scene: !include scenes.yaml
 
 
 
+timer: !include includes/timer.yaml
+recorder: !include configuration/recorder.yaml
+
+input_boolean: !include includes/input/input_boolean.yaml
+input_select: !include includes/input/input_select.yaml
+input_number: !include includes/input/input_number.yaml
+input_datetime: !include includes/input/input_datetime.yaml
+input_text: !include includes/input/input_text.yaml
+
+sensor: !include_dir_merge_list includes/sensor
+binary_sensor: !include_dir_merge_list includes/binary_sensor
+
+
+automation: !include_dir_merge_list includes/automations
+script: !include_dir_merge_named includes/scripts
+scene: !include includes/scenes.yaml
+
+
+switch: !include configuration/switch.yaml
+light: !include configuration/light.yaml
+group: !include includes/groups.yaml
 
 
 
