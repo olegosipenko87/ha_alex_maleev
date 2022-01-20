@@ -1,25 +1,25 @@
 homeassistant:
-#  name: 
-#  latitude: 
-#  longitude: 
+#  name:
+#  latitude:
+#  longitude:
 #  elevation: 50
   unit_system: metric
   time_zone: Europe/Kiev
 #  packages: !include_dir_merge_named includes/packages
 #  customize: !include customize.yaml
-  auth_providers:
-    - type: trusted_networks
-      trusted_networks:
-        - 192.168.0.0/24
-        - fd00::/8
+#  auth_providers:
+#    - type: trusted_networks
+#      trusted_networks:
+#        - 192.168.0.0/24
+#        - fd00::/8
   #      - 192.168.0.1/24
 #        - 192.168.0.109
 #        - 172.30.33.0/24
 #        - 172.30.32.0/23
 #        - 172.17.0.0/16
 #        - 172.30.33.0
-        - 134.249.143.65
-      allow_bypass_login: true
+#        - 134.249.143.65
+#      allow_bypass_login: true
 
 http:
   use_x_forwarded_for: true
@@ -45,31 +45,31 @@ logger:
 
 #zone:
 #  - name: Home
-#    latitude: 
-#    longitude: 
+#    latitude:
+#    longitude:
 #    radius: 70
 #    icon: mdi:account-multiple
 
 #frontend:
 #  themes: !include_dir_merge_named themes
-  
+
 #device_tracker: !include configuration/device_tracker.yaml
 
 #person: !include configuration/person.yaml
 
 #telegram_bot:
 #  - platform: polling
-#    api_key: 
+#    api_key:
 #    allowed_chat_ids:
 
 #notify:
 #  - name: telegram_id_1
 #    platform: telegram
-#    chat_id: 
+#    chat_id:
 #  - name: telegram_id_2
 #    platform: telegram
-#    chat_id: 
-    
+#    chat_id:
+
 #duckdns: !include configuration/duckdns.yaml
 
 
