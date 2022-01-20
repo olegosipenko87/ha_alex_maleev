@@ -1,0 +1,319 @@
+title: server
+path: server
+
+cards:
+
+- type: vertical-stack                    # в отдельный столбец
+  cards:
+
+
+  #- type: markdown
+  #  content: >
+  #       **Текущее состояние**
+  - type: entities
+    show_header_toggle: false
+    entities:
+      - entity: sensor.time
+        name: Текущее время
+        icon: mdi:clock-outline
+      - entity: sensor.date_string
+        name: Дата
+        icon: mdi:calendar-check-outline
+      - type: divider                     # добовляет разделительную полосу
+      - entity: sensor.last_boot
+        name: Последняя перезагрузка RPi
+      - entity: sensor.time_online
+        name: Последняя перезагрузка HA
+      - type: divider                     # добовляет разделительную полосу
+      - entity: sensor.installed_ver_ha
+        card_mod:
+          style: |
+            :host .text-content {
+              color: {% if states.sensor.installed_ver_ha.state == states.sensor.latest_ver_ha.state %} green {% else %} red {% endif %}
+            }
+      - entity: sensor.latest_ver_ha
+
+
+
+
+  - type: entities
+    entities:
+      - entity: sensor.last_google_backup_train
+      - entity: sensor.snapshots_in_google_drive_train
+      - entity: sensor.snapshots_in_hassio_train
+
+
+  - type: custom:mini-graph-card
+    entities:
+      - sensor.maria_db_size
+    name: Размер БД
+    height: 65
+    line_width: 2
+    font_size: 70
+    hours_to_show: 24
+    points_per_hour: 6
+    show:
+      fill: true
+
+- type: vertical-stack                    # в отдельный столбец
+  cards:
+
+
+
+
+
+  - type: entities
+    entities:
+      - type: custom:bar-card
+        positions:
+          icon: outside
+          indicator: inside
+          name: outside
+        width: 60%
+        height: 15px
+        entities:
+          - entity: sensor.processor_use
+            name: Загрузка CPU
+          - entity: sensor.memory_use_percent
+            name: Загрузка ОЗУ
+          - entity: sensor.disk_use_percent
+            name: Диск заполнен
+          - entity: sensor.disk_free
+            name: Свободное место
+            min: 0
+            max: 492
+
+  - type: custom:mini-graph-card
+    entities:
+     - sensor.cpu_temperature
+    name: CPU Temperature
+    height: 65
+    line_width: 2
+    font_size: 70
+    hours_to_show: 24
+    points_per_hour: 2
+    show:
+     #extrema: true
+     fill: true
+     #graph: bar
+    color_thresholds:
+     - value: 60
+       color: "#FF0000"
+     - value: 40
+       color: "#00FF00"
+
+  - type: entities
+    show_header_toggle: false
+    entities:
+      - entity: sensor.universal_socket_voltage
+        name: Напряжение
+        icon: mdi:home-lightning-bolt-outline
+
+  - type: statistics-graph
+    #title: 'Напряжение'
+    days_to_show: 7
+    chart_type: line
+    entities:
+      - entity: sensor.universal_socket_voltage
+        name: V
+
+- type: vertical-stack                      # в отдельный столбец
+  cards:
+
+  - type: custom:browser-player
+
+  - type: entities
+    state_color: true
+    show_header_toggle: false
+    entities:
+
+      - entity: person.id_1
+        name: Олег
+        secondary_info: last-changed
+        tap_action: none
+        hold_action: none
+
+      - type: custom:hui-element
+        card_type: history-graph
+        entities: [entity: person.id_1]
+        hours_to_show: 48
+        refresh_interval: 0
+
+      - type: custom:hui-element
+        card_type: glance
+        show_state: true
+        entities:
+
+          - entity: person.id_1
+            card_mod:
+              style: |
+                :host {
+                  --paper-item-icon-color: {{ 'green' if is_state('person.id_1', 'home') else 'red' }};
+                }
+            name: GPS
+            icon: mdi:google-maps
+            tap_action: none
+            hold_action: none
+
+        #  - entity: sensor.oleg_mob_wifi_connection
+        #    card_mod:
+        #      style: |
+        #        :host {
+        #          --paper-item-icon-color: {{ 'green' if is_state('device_tracker.id_1_mob_wifi, 'home') else 'red' }};
+        #        }
+        #    name: WiFi
+        #    icon: mdi:wifi
+        #    tap_action: none
+        #    hold_action: none
+
+          - entity: sensor.oleg_mob_battery_level
+            name:  Ур заряда
+            card_mod:
+              style: |
+                :host {
+                  --paper-item-icon-color: {{ 'green' if (states('sensor.oleg_mob_battery_level')|float > 20) else 'red' }};
+                }
+            tap_action: none
+            hold_action: none
+
+
+          - entity: input_boolean.button_to_display_the_map
+            name:  Карта
+            icon: mdi:earth
+            card_mod:
+              style: |
+                :host {
+                  --paper-item-icon-color: {{ 'green' if is_state('input_boolean.button_to_display_the_map', 'on') else 'red' }};
+                }
+            #show_state: false
+            tap_action:
+              action: call-service
+              service: input_boolean.toggle
+              service_data:
+                entity_id: input_boolean.button_to_display_the_map
+  - type: conditional
+    conditions:
+      - entity: input_boolean.button_to_display_the_map
+        state: "on"
+    card:
+      type: entities
+      entities:
+        - entity: sensor.oleg_mob_geocoded_location
+          name: 'Адрес:'
+          tap_action: none
+          hold_action: none
+          secondary_info: last-updated
+
+        - type: custom:hui-element
+          card_type: map
+          class: map
+          dark_mode: true
+          aspect_ratio: 16:9
+          hours_to_show: 6
+          entities: [person.id_1]
+          default_zoom: 16
+
+
+  - type: entities
+    state_color: true
+    show_header_toggle: false
+    entities:
+
+      - entity: person.id_2
+        name: Аня
+        secondary_info: last-changed
+        tap_action: none
+        hold_action: none
+
+      - type: custom:hui-element
+        card_type: history-graph
+        entities: [entity: person.id_2]
+        hours_to_show: 48
+        refresh_interval: 0
+
+      - type: custom:hui-element
+        card_type: glance
+        show_state: true
+        entities:
+
+          - entity: person.id_2
+            card_mod:
+              style: |
+                :host {
+                  --paper-item-icon-color: {{ 'green' if is_state('person.id_2', 'home') else 'red' }};
+                }
+            name: GPS
+            icon: mdi:google-maps
+            tap_action: none
+            hold_action: none
+
+        #  - entity: sensor.oleg_mob_wifi_connection
+        #    card_mod:
+        #      style: |
+        #        :host {
+        #          --paper-item-icon-color: {{ 'green' if is_state('device_tracker.id_1_mob_wifi, 'home') else 'red' }};
+        #        }
+        #    name: WiFi
+        #    icon: mdi:wifi
+        #    tap_action: none
+        #    hold_action: none
+
+          - entity: sensor.ann_mob_battery_level
+            name:  Ур заряда
+            card_mod:
+              style: |
+                :host {
+                  --paper-item-icon-color: {{ 'green' if (states('sensor.ann_mob_battery_level')|float > 20) else 'red' }};
+                }
+            tap_action: none
+            hold_action: none
+
+
+          - entity: input_boolean.button_to_display_the_map
+            name:  Карта
+            icon: mdi:earth
+            card_mod:
+              style: |
+                :host {
+                  --paper-item-icon-color: {{ 'green' if is_state('input_boolean.button_to_display_the_map', 'on') else 'red' }};
+                }
+            #show_state: false
+            tap_action:
+              action: call-service
+              service: input_boolean.toggle
+              service_data:
+                entity_id: input_boolean.button_to_display_the_map
+  - type: conditional
+    conditions:
+      - entity: input_boolean.button_to_display_the_map
+        state: "on"
+    card:
+      type: entities
+      entities:
+        - entity: sensor.ann_mob_geocoded_location
+          name: 'Адрес:'
+          tap_action: none
+          hold_action: none
+          secondary_info: last-updated
+
+        - type: custom:hui-element
+          card_type: map
+          class: map
+          dark_mode: true
+          aspect_ratio: 16:9
+          hours_to_show: 6
+          entities: [person.id_2]
+          default_zoom: 16
+
+
+
+
+
+
+
+
+
+
+
+
+#

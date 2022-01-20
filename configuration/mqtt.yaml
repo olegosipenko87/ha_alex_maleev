@@ -1,0 +1,11 @@
+
+
+
+## Выбрать один из вариантов для брокера!
+  broker: core-mosquitto  # Локальный брокер
+#  broker: IP adress  # Внешний брокер
+  discovery: true
+  discovery_prefix: homeassistant
+  keepalive: 30
+  username: mqtt
+  password: mqtt

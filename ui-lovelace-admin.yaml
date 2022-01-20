@@ -1,0 +1,8 @@
+
+
+title: My Home Admin
+
+
+
+views:
+  - !include lovelace/admin-server.yaml
